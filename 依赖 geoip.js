@@ -1,4 +1,4 @@
-// 第六版 - 支持下载器低倍率下载文件
+// 第七版 - 优化0-RTT
 const CDN_URL = "https://cdn.jsdmirror.com";
 
 const geoxURL = {
@@ -189,8 +189,8 @@ const tunConfig = [];         // tun配置
 // 规则配置
 const rulesConfig = (geoRules = []) => [
   // --- 1. 基础设施层 (屏蔽与私有网络) ---
-  // 屏蔽非中国区的 QUIC 流量，确保流媒体降级到 TCP 触发精确分流
-  "AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((GEOSITE,CN),(GEOIP,CN)))))),REJECT",
+  // 屏蔽中国区的 QUIC 流量，确保流媒体降级到 TCP 触发精确分流
+  "AND,((NETWORK,UDP),(DST-PORT,443),((OR,((GEOSITE,CN),(GEOIP,CN))))),REJECT",
   "GEOSITE,CATEGORY-ADS@ADS,REJECT",
   `GEOSITE,PRIVATE,${GN.Direct.name}`,
   `GEOIP,PRIVATE,${GN.Direct.name},no-resolve`,
