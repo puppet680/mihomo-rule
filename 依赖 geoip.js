@@ -233,6 +233,7 @@ const rulesConfig = (geoRules = []) => [
   // --- 5. 国内直连层 ---
   `GEOSITE,CN,${GN.Direct.name}`,
   `GEOIP,CN,${GN.Direct.name},no-resolve`,
+  `RULE-SET,app-cms10,${GN.Direct.name}`,
 
   // --- 6. 区域 IP 分流 (动态生成部分) ---
   ...geoRules,
@@ -336,6 +337,7 @@ const ruleProvidersConfig = {
     "cdn": { ...ruleProviderCommonMrs, behavior: "domain", url: `${CDN_URL}/gh/QuixoticHeart/rule-set@ruleset/meta/domain/cdn.mrs`, path: "./rulesets/domain/cdn.mrs" },
     "fakeip-filter": { ...ruleProviderCommonMrs, behavior: "domain", url: `${CDN_URL}/gh/DustinWin/ruleset_geodata@mihomo-ruleset/fakeip-filter.mrs`, path: "./rulesets/domain/fakeip-filter.mrs" },
     "download-client": { ...ruleProviderCommonYaml, behavior: "classical", url: `${CDN_URL}/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Download/Download.yaml`, path: "./rulesets/domain/download-client.yaml" },
+    "app-cms10": { ...ruleProviderCommonYaml, behavior: "classical", url: `https://raw.githubusercontent.com/puppet680/cms-config/refs/heads/main/mihomo_rules.yaml`, path: "./rulesets/domain/app-cms10.yaml" },
 };
 /**
  * 业务逻辑配置构建器
