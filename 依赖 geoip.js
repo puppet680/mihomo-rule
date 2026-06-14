@@ -190,11 +190,13 @@ const tunConfig = [];         // tun配置
 const rulesConfig = (geoRules = []) => [
   // --- 1. 基础设施层 (屏蔽与私有网络) ---
   // 屏蔽中国区的 QUIC 流量，确保流媒体降级到 TCP 触发精确分流
-  "AND,((NETWORK,UDP),(DST-PORT,443),((OR,((GEOSITE,CN),(GEOIP,CN))))),REJECT",
+  "AND,((NETWORK,UDP),(DST-PORT,443),(OR,((GEOSITE,CN),(GEOIP,CN)))),REJECT",
   "GEOSITE,CATEGORY-ADS@ADS,REJECT",
   `GEOSITE,PRIVATE,${GN.Direct.name}`,
   `GEOIP,PRIVATE,${GN.Direct.name},no-resolve`,
   // 自定义规则
+  `DOMAIN,invite.linuxdo.org,${GN.Direct.name}`,
+  `RULE-SET,app-cms10,${GN.Direct.name}`,
   // 下载器
   `AND,((OR,((RULE-SET,download-client),(PROCESS-NAME-REGEX,(?i)ABDownloadManager))),(NOT,((GEOSITE,CN))),(NOT,((GEOIP,CN)))),${GN.Download.name}`,
   // --- 2. 专项业务层 (IP/节点高敏感) ---
@@ -233,7 +235,6 @@ const rulesConfig = (geoRules = []) => [
   // --- 5. 国内直连层 ---
   `GEOSITE,CN,${GN.Direct.name}`,
   `GEOIP,CN,${GN.Direct.name},no-resolve`,
-  `RULE-SET,app-cms10,${GN.Direct.name}`,
 
   // --- 6. 区域 IP 分流 (动态生成部分) ---
   ...geoRules,
@@ -339,6 +340,7 @@ const ruleProvidersConfig = {
     "download-client": { ...ruleProviderCommonYaml, behavior: "classical", url: `${CDN_URL}/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Download/Download.yaml`, path: "./rulesets/domain/download-client.yaml" },
     "app-cms10": { ...ruleProviderCommonYaml, behavior: "classical", url: `https://raw.githubusercontent.com/puppet680/cms-config/refs/heads/main/mihomo_rules.yaml`, path: "./rulesets/domain/app-cms10.yaml" },
 };
+
 /**
  * 业务逻辑配置构建器
  * * @param {Object} config - 待修改的配置对象。
